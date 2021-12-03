@@ -1,9 +1,14 @@
+"use strict"
 // Player Creator
+let outputDisplay;
 const players = [];
 let deck = [];
+let peoplePlaying = [];
 let handLengthPlayer = 0;
 let handLengthDealer = 0;
 let input;
+
+
 
 const createPlayers = (input) => {
     for (let i = 1; i < input + 1; i++) {
@@ -11,6 +16,7 @@ const createPlayers = (input) => {
             name: `Player${i}:`,
             hand: [],
             value: 0,
+            playing: true,
         }
         players.push(player);
     }
@@ -56,8 +62,8 @@ startDOM.addEventListener('click', function () {
 
 });
 submitDOM.addEventListener('click', function () {
-    init()
-    let result = main();
+    init();
+    DISPLAY.innerText = '';
     startDisabledDOM = document.querySelector('.start').disabled = true;
     continueDisabledDOM = document.querySelector('.continue').disabled = true;
     dealDisabledDOM = document.querySelector('.deal').disabled = false;
@@ -191,6 +197,66 @@ function dealerValueAdder() {
         return dealerValue;
     }
 }
+
+const blackjackChecker = () => {
+    let outputValue = "";
+    for (let i = 0; i < input; i++) {
+        if (players[i].value === maxScore) {
+            outputValue += `Blackjack! ${players[i].name} wins!`;
+            players[i].playing = false;
+        } else if (players[i].value > maxScore) {
+            outputValue += `${players[currentPlayer].name} busted! ${players[currentPlayer].name} lost!`;
+            players[i].playing = false;
+            nextPlayer = true;
+        } else if (players[i].value === maxScore) {
+            outputValue += `Blackjack! ${players[currentPlayer].name} wins!`;
+            players[i].playing = false;
+            nextPlayer = true;
+        } else if (players[i].playing === true) {
+            peoplePlaying.push(players[i]);
+            console.log(peoplePlaying);
+        }
+
+        if (dealerValue === maxScore) {
+            outputValue += `Blackjack! Dealer wins!`;
+        } else if (players[i].value === maxScore && dealerValue === maxScore) {
+            outputValue += `Both got blackjack! ${players[i].name} ties!`;
+        }
+    }
+    output(outputValue);
+}
+const dealButtonDisable = () => {
+    startDisabledDOM = document.querySelector('.start').disabled = true;
+    continueDisabledDOM = document.querySelector('.continue').disabled = true;
+    dealDisabledDOM = document.querySelector('.deal').disabled = true;
+    hitDisabledDOM = document.querySelector('.hit').disabled = false;
+    standDisabledDOM = document.querySelector('.stand').disabled = false;
+    submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
+}
+
+const hitButtonDisable = () => {
+    startDisabledDOM = document.querySelector('.start').disabled = true;
+    continueDisabledDOM = document.querySelector('.continue').disabled = true;
+    dealDisabledDOM = document.querySelector('.deal').disabled = true;
+    hitDisabledDOM = document.querySelector('.hit').disabled = false;
+    standDisabledDOM = document.querySelector('.stand').disabled = false;
+    submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
+}
+
+const roundOverChecker = () => {
+    if (roundOver === true) {
+        startDisabledDOM = document.querySelector('.start').disabled = true;
+        continueDisabledDOM = document.querySelector('.continue').disabled = true;
+        dealDisabledDOM = document.querySelector('.deal').disabled = true;
+        hitDisabledDOM = document.querySelector('.hit').disabled = true;
+        standDisabledDOM = document.querySelector('.stand').disabled = true;
+        submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
+    }
+}
+
+const drawCard = () => {
+    players[currentPlayer].hand.push(deck.pop());
+}
 // Win Conditions
 let maxScore = 21;
 let dealerHit = 17;
@@ -213,146 +279,130 @@ function continued() {
 }
 
 function deal() {
+    let outputValue = '';
+
     dealDeck(input);
+    aceChecker();
     playerValueAdder();
     dealerValueAdder();
-    aceChecker();
-    console.log(players)
     for (let i = 0; i < input; i++) {
-        let cardDisplayerPlayer = players[i].name + players[i].hand[0].suit + players[i].hand[0].name + ' ';
-        cardDisplayerPlayer += players[i].hand[1].suit + players[i].hand[1].name + ' ';
-        output(cardDisplayerPlayer + players[i].value);
+        outputValue += `${players[i].name}${players[i].hand[0].suit}${players[i].hand[0].name} `;
+
+        outputValue += `${players[i].hand[1].suit}${players[i].hand[1].name} `;
+
+        outputValue += `${players[i].value}
+        `;
+
         handLengthPlayer += 2;
     }
     handLengthPlayer = handLengthPlayer / input;
-    console.log(handLengthPlayer);
-    let cardDisplayerDealer = 'Dealer: ' + dealerHand[0].suit + dealerHand[0].name + ' ' + dealerHand[1].suit + dealerHand[1].name + ' ';
-    output(cardDisplayerDealer + dealerValue);
+    outputValue += `Dealer:${dealerHand[0].suit}${dealerHand[0].name} ${dealerHand[1].suit}${dealerHand[1].name} `;
+    outputValue += dealerValue;
+    blackjackChecker();
 
-    for (let i = 0; i < input; i++) {
-        if (players[i].value === maxScore) {
-            output(`Blackjack! ${players[i].name} wins!`);
-            roundOver = true;
-        } else if (dealerValue === maxScore) {
-            output(`Blackjack! ${players[i].name} lost!`);
-            roundOver = true;
-        } else if (players[i].value === maxScore && dealerValue === maxScore) {
-            output(`Both got blackjack! ${players[i].name} ties!`);
-            roundOver = true;
-        }
-    }
-    startDisabledDOM = document.querySelector('.start').disabled = true;
-    continueDisabledDOM = document.querySelector('.continue').disabled = true;
-    dealDisabledDOM = document.querySelector('.deal').disabled = true;
-    hitDisabledDOM = document.querySelector('.hit').disabled = false;
-    standDisabledDOM = document.querySelector('.stand').disabled = false;
-    submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
-    if (roundOver === true) {
-        startDisabledDOM = document.querySelector('.start').disabled = true;
-        continueDisabledDOM = document.querySelector('.continue').disabled = true;
-        dealDisabledDOM = document.querySelector('.deal').disabled = true;
-        hitDisabledDOM = document.querySelector('.hit').disabled = true;
-        standDisabledDOM = document.querySelector('.stand').disabled = true;
-        submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
-    }
+    outputValue += `
+    It is ${peoplePlaying[currentPlayer].name} 's turn. Hit or stand.
+    `;
+
+    dealButtonDisable();
+    handLengthDealer = 2;
+    roundOverChecker();
+    output(outputValue);
 }
 
 function hit() {
-    startDisabledDOM = document.querySelector('.start').disabled = true;
-    continueDisabledDOM = document.querySelector('.continue').disabled = true;
-    dealDisabledDOM = document.querySelector('.deal').disabled = true;
-    hitDisabledDOM = document.querySelector('.hit').disabled = false;
-    standDisabledDOM = document.querySelector('.stand').disabled = false;
-    submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
+    console.log(outputDisplay)
+    outputDisplay.innerText = ""
+
+    let outputValue = '';
+    hitButtonDisable();
 
     for (let i = 0; i < 1; i++) {
-        players[currentPlayer].hand.push(deck.pop());
-        playerValueAdder();
+        outputValue += `${players[currentPlayer].name} hit!
+                `;
+        drawCard();
         aceChecker();
+        playerValueAdder();
         for (let x = 0; x < 1; x++) {
-            let cardDisplayerPlayer = players[currentPlayer].name + players[currentPlayer].hand[0].suit + players[currentPlayer].hand[0].name + ' ';
+            outputValue += players[currentPlayer].name + players[currentPlayer].hand[0].suit + players[currentPlayer].hand[0].name + ' ';
 
-            cardDisplayerPlayer += players[currentPlayer].hand[1].suit + players[currentPlayer].hand[1].name + ' ';
+            outputValue += players[currentPlayer].hand[1].suit + players[currentPlayer].hand[1].name + ' ';
 
-            cardDisplayerPlayer += players[currentPlayer].hand[handLengthPlayer].suit + players[currentPlayer].hand[handLengthPlayer].name + ' ';
+            outputValue += players[currentPlayer].hand[handLengthPlayer].suit + players[currentPlayer].hand[handLengthPlayer].name + ' ';
 
-            output(cardDisplayerPlayer + players[currentPlayer].value);
+            outputValue += players[currentPlayer].value;
             handLengthPlayer += 1;
         }
-        let cardDisplayerDealer = 'Dealer: ' + dealerHand[0].suit + dealerHand[0].name + ' ' + dealerHand[1].suit + dealerHand[1].name + ' ';
-        output(cardDisplayerDealer + dealerValue);
-        if (players[currentPlayer].value > maxScore) {
-            output(`${players[currentPlayer].name} busted! ${players[currentPlayer].name} lost!`);
-            nextPlayer = true;
-        } else if (players[currentPlayer].value === maxScore) {
-            output(`Blackjack! ${players[currentPlayer].name} wins!`);
-            nextPlayer = true;
-            roundOver = true;
-        }
-        if (roundOver === true) {
-            startDisabledDOM = document.querySelector('.start').disabled = true;
-            continueDisabledDOM = document.querySelector('.continue').disabled = true;
-            dealDisabledDOM = document.querySelector('.deal').disabled = true;
-            hitDisabledDOM = document.querySelector('.hit').disabled = true;
-            standDisabledDOM = document.querySelector('.stand').disabled = true;
-            submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
-        }
+
+        blackjackChecker();
+        roundOverChecker();
         if (nextPlayer === true) {
             currentPlayer++;
-            console.log(currentPlayer);
             handLengthPlayer = 2;
             nextPlayer = false;
+            if (currentPlayer < input) {
+                outputValue += `
+                It is ${players[currentPlayer].name}'s turn!`;
+            } else {
+                currentPlayer = input - 1;
+                roundOver = true;
+            }
         }
     }
+    outputDisplay.innerText = outputValue
 }
 function stand() {
-    while (dealerValue < dealerHit) {
-        output(players[0].name + players[0].value)
-        dealerHand.push(deck.pop());
-        dealerValueAdder();
-        for (let i = 0; i < players[0].hand.length; i++) {
-            if (players[0].hand[i].name === 'A') {
-                if (players[0].value + 11 > 21 && players[0].hand[i].name === 'A') {
-                    players[0].hand[i].value = 1;
+    let outputValue = ""
+
+    outputValue += `${players[currentPlayer].name} stood!`;
+    nextPlayer = true;
+    if (currentPlayer >= input - 1) {
+        while (dealerValue < dealerHit) {
+            for (let x = 0; x < input; x++) {
+                for (let i = 0; i < input; i++) {
+                    outputValue += players[i].name + players[i].value;
                 }
+                dealerHand.push(deck.pop());
+                dealerValueAdder();
+                console.log(dealerHand);
+                console.log(dealerValue);
+                for (let i = 0; i < players[x].hand.length; i++) {
+                    if (players[x].hand[i].name === 'A') {
+                        if (players[x].value + 11 > 21 && players[x].hand[i].name === 'A') {
+                            players[x].hand[i].value = 1;
+                        }
+                    }
+                }
+                for (let i = 0; i < dealerHand.length; i++) {
+                    if (dealerHand[i].name === 'A') {
+                        if (dealerValue + 11 > 21 && dealerHand[i].name === 'A') {
+                            dealerHand[i].value = 1;
+                        }
+                    }
+                }
+                let cardDisplayerDealer = 'Dealer: ' + dealerHand[0].suit + dealerHand[0].name + ' ' + dealerHand[1].suit + dealerHand[1].name + ' ';
+                cardDisplayerDealer += dealerHand[handLengthDealer].suit + dealerHand[handLengthDealer].name + ' ';
+                handLengthDealer += 1;
+                outputValue += cardDisplayerDealer + dealerValue;
             }
         }
-        for (let i = 0; i < dealerHand.length; i++) {
-            if (dealerHand[i].name === 'A') {
-                if (dealerValue + 11 > 21 && dealerHand[i].name === 'A') {
-                    dealerHand[i].value = 1;
-                }
-            }
+        if (dealerValue > maxScore) {
+            outputValue += 'Dealer busted!';
+            roundOver = true;
         }
         for (let i = 0; i < input; i++) {
-            let cardDisplayerDealer = 'Dealer: ' + dealerHand[0].suit + dealerHand[0].name + ' ' + dealerHand[1].suit + dealerHand[1].name + ' ';
-            cardDisplayerDealer += dealerHand[handLengthDealer].suit + dealerHand[handLengthDealer].name + ' ';
-            handLengthDealer += 1;
-            output(cardDisplayerDealer + dealerValue);
+            if (dealerValue > players[i].value && dealerValue < maxScore && players[i].value < maxScore) {
+                outputValue += `${players[i].name} lost!`;
+                roundOver = true;
+            } else if (dealerValue < players[i].value && dealerValue < maxScore && players[i].value < maxScore) {
+                outputValue += `${players[i].name} won!`;
+                roundOver = true;
+            } else if (dealerValue === players[i].value && dealerValue < maxScore && players[i].value < maxScore) {
+                outputValue += `${players[i].name} tied!`;
+                roundOver = true;
+            }
         }
     }
-    if (dealerValue > maxScore) {
-        output('Dealer busted!');
-        roundOver = true;
-    }
-    for (let i = 0; i < input; i++) {
-        if (dealerValue > players[i].value && dealerValue < maxScore && players[i].value < maxScore) {
-            output('lose');
-            roundOver = true;
-        } else if (dealerValue < players[i].value && dealerValue < maxScore && players[i].value < maxScore) {
-            output('win');
-            roundOver = true;
-        } else if (dealerValue === players[i].value && dealerValue < maxScore && players[i].value < maxScore) {
-            output('tie');
-            roundOver = true;
-        }
-    }
-    startDisabledDOM = document.querySelector('.start').disabled = true;
-    continueDisabledDOM = document.querySelector('.continue').disabled = true;
-    dealDisabledDOM = document.querySelector('.deal').disabled = true;
-    hitDisabledDOM = document.querySelector('.hit').disabled = true;
-    standDisabledDOM = document.querySelector('.stand').disabled = true;
-    submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
     if (roundOver === true) {
         startDisabledDOM = document.querySelector('.start').disabled = true;
         continueDisabledDOM = document.querySelector('.continue').disabled = true;
@@ -361,19 +411,32 @@ function stand() {
         standDisabledDOM = document.querySelector('.stand').disabled = true;
         submitDisabledDOM = document.querySelector('.submitBtn').disabled = true;
     }
+    if (nextPlayer === true) {
+        currentPlayer++;
+        handLengthPlayer = 2;
+        nextPlayer = false;
+        if (currentPlayer < input) {
+            outputValue += `It is ${players[currentPlayer].name}'s turn!`;
+        } else {
+            currentPlayer = input - 1;
+            roundOver = true;
+        }
+    }
+
 }
 function init() {
     const numOfPlayers = playersDOM.options[playersDOM.selectedIndex].value;
-    console.log(typeof (numOfPlayers))
     input = Number(numOfPlayers);
     createPlayers(input);
     deck = shuffleDeck(createDeck(52))
 }
 
 function output(result) {
-    const myOutputValue = document.createElement('h3');
-    myOutputValue.innerText = result;
-    document.body.appendChild(myOutputValue);
+    outputDisplay = document.createElement('h3');
+    outputDisplay.setAttribute("class", "cardDisplay")
+    outputDisplay.innerText = result;
+    document.body.appendChild(outputDisplay);
+
 }
 
 const main = () => {
