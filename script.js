@@ -12,7 +12,7 @@ let input;
 const createPlayers = (input) => {
   for (let i = 1; i < input + 1; i++) {
     const player = {
-      name: `Player${i}:`,
+      name: `Player ${i}`,
       hand: [],
       value: 0,
       playing: true,
@@ -211,6 +211,8 @@ function nextPlayerChecker() {
   let outputValue = "";
   if (nextPlayer === true) {
     currentPlayer++;
+    console.log(currentPlayer);
+    z = z + 5;
     hitCounter = 0;
     handLengthPlayer = 2;
     nextPlayer = false;
@@ -309,6 +311,138 @@ const roundOverChecker = () => {
 const drawCard = () => {
   players[currentPlayer].hand.push(deck.pop());
 };
+
+const cardCSS = (suit, value, card) => {
+  if (suit === "♦️") {
+    $(`.suit${card}`).text("♦️");
+    if (value == 1) {
+      $(`.value${card}`).text(1);
+    } else if (value == 2) {
+      $(`.value${card}`).text(2);
+    } else if (value == 3) {
+      $(`.value${card}`).text(3);
+    } else if (value == 4) {
+      $(`.value${card}`).text(4);
+    } else if (value == 5) {
+      $(`.value${card}`).text(5);
+    } else if (value == 6) {
+      $(`.value${card}`).text(6);
+    } else if (value == 7) {
+      $(`.value${card}`).text(7);
+    } else if (value == 8) {
+      $(`.value${card}`).text(8);
+    } else if (value == 9) {
+      $(`.value${card}`).text(9);
+    } else if (value == 10) {
+      $(`.value${card}`).text(10);
+    } else if (value == "K") {
+      $(`.value${card}`).text("K");
+    } else if (value == "Q") {
+      $(`.value${card}`).text("Q");
+    } else if (value == "J") {
+      $(`.value${card}`).text("J");
+    } else if (value == "A") {
+      $(`.value${card}`).text("A");
+    }
+  } else if (suit === "♥️") {
+    $(`.suit${card}`).text("♥️");
+    if (value == 1) {
+      $(`.value${card}`).text(1);
+    } else if (value == 2) {
+      $(`.value${card}`).text(2);
+    } else if (value == 3) {
+      $(`.value${card}`).text(3);
+    } else if (value == 4) {
+      $(`.value${card}`).text(4);
+    } else if (value == 5) {
+      $(`.value${card}`).text(5);
+    } else if (value == 6) {
+      $(`.value${card}`).text(6);
+    } else if (value == 7) {
+      $(`.value${card}`).text(7);
+    } else if (value == 8) {
+      $(`.value${card}`).text(8);
+    } else if (value == 9) {
+      $(`.value${card}`).text(9);
+    } else if (value == 10) {
+      $(`.value${card}`).text(10);
+    } else if (value == "K") {
+      $(`.value${card}`).text("K");
+    } else if (value == "Q") {
+      $(`.value${card}`).text("Q");
+    } else if (value == "J") {
+      $(`.value${card}`).text("J");
+    } else if (value == "A") {
+      $(`.value${card}`).text("A");
+    }
+  } else if (suit === "♣️") {
+    $(`.suit${card}`).text("♣️");
+    if (value == 1) {
+      $(`.value${card}`).text(1);
+    } else if (value == 2) {
+      $(`.value${card}`).text(2);
+    } else if (value == 3) {
+      $(`.value${card}`).text(3);
+    } else if (value == 4) {
+      $(`.value${card}`).text(4);
+    } else if (value == 5) {
+      $(`.value${card}`).text(5);
+    } else if (value == 6) {
+      $(`.value${card}`).text(6);
+    } else if (value == 7) {
+      $(`.value${card}`).text(7);
+    } else if (value == 8) {
+      $(`.value${card}`).text(8);
+    } else if (value == 9) {
+      $(`.value${card}`).text(9);
+    } else if (value == 10) {
+      $(`.value${card}`).text(10);
+    } else if (value == "K") {
+      $(`.value${card}`).text("K");
+    } else if (value == "Q") {
+      $(`.value${card}`).text("Q");
+    } else if (value == "J") {
+      $(`.value${card}`).text("J");
+    } else if (value == "A") {
+      $(`.value${card}`).text("A");
+    }
+  } else if (suit === "♠️") {
+    $(`.suit${card}`).text("♠️");
+    if (value == 1) {
+      $(`.value${card}`).text(1);
+    } else if (value == 2) {
+      $(`.value${card}`).text(2);
+    } else if (value == 3) {
+      $(`.value${card}`).text(3);
+    } else if (value == 4) {
+      $(`.value${card}`).text(4);
+    } else if (value == 5) {
+      $(`.value${card}`).text(5);
+    } else if (value == 6) {
+      $(`.value${card}`).text(6);
+    } else if (value == 7) {
+      $(`.value${card}`).text(7);
+    } else if (value == 8) {
+      $(`.value${card}`).text(8);
+    } else if (value == 9) {
+      $(`.value${card}`).text(9);
+    } else if (value == 10) {
+      $(`.value${card}`).text(10);
+    } else if (value == "K") {
+      $(`.value${card}`).text("K");
+    } else if (value == "Q") {
+      $(`.value${card}`).text("Q");
+    } else if (value == "J") {
+      $(`.value${card}`).text("J");
+    } else if (value == "A") {
+      $(`.value${card}`).text("A");
+    }
+  } else {
+    $(`.value${card}`).text("");
+    $(`.suit${card}`).text("");
+  }
+};
+
 // Win Conditions
 let maxScore = 21;
 let dealerHit = 17;
@@ -317,6 +451,8 @@ let nextPlayer = false;
 let currentPlayer = 0;
 let hitCounter = 0;
 let roundCounter = 1;
+let standCounter = 0;
+let z = 0;
 
 // Blackjack
 
@@ -330,6 +466,7 @@ function continued() {}
 
 function deal() {
   let outputValue = "";
+  let y = 0;
   outputValue += `----------Round ${roundCounter}----------
     `;
 
@@ -341,10 +478,13 @@ function deal() {
     outputValue += `${players[i].name}${players[i].hand[0].suit}${players[i].hand[0].name} `;
 
     outputValue += `${players[i].hand[1].suit}${players[i].hand[1].name} `;
+    cardCSS(players[i].hand[0].suit, players[i].hand[0].name, 1 + y);
+    cardCSS(players[i].hand[1].suit, players[i].hand[1].name, 2 + y);
 
     outputValue += `${players[i].value}
         `;
-
+    y = y + 5;
+    console.log(y);
     handLengthPlayer += 2;
   }
   addPeoplePlaying();
@@ -353,6 +493,8 @@ function deal() {
   handLengthPlayer = handLengthPlayer - 1;
   outputValue += `Dealer:${dealerHand[0].suit}${dealerHand[0].name} ${dealerHand[1].suit}${dealerHand[1].name} `;
   outputValue += dealerValue;
+  cardCSS(dealerHand[0].suit, dealerHand[0].name, 21);
+  cardCSS(dealerHand[1].suit, dealerHand[1].name, 22);
 
   outputValue += `
     It is ${players[currentPlayer].name} 's turn. Hit or stand.
@@ -397,6 +539,11 @@ function hit() {
           players[currentPlayer].hand[2 + y].suit +
           players[currentPlayer].hand[2 + y].name +
           " ";
+        cardCSS(
+          players[currentPlayer].hand[2 + y].suit,
+          players[currentPlayer].hand[2 + y].name,
+          3 + y + z
+        );
       }
       outputValue += players[currentPlayer].value;
 
@@ -421,19 +568,22 @@ function hit() {
 function stand() {
   outputDisplay.innerText = "";
   let outputValue = "";
+  standCounter += 1;
   outputValue += `----------Round ${roundCounter}----------
     `;
 
   outputValue += `${players[currentPlayer].name} stood!`;
   nextPlayer = true;
-  if (currentPlayer >= input) {
+  nextPlayerChecker();
+  console.log(currentPlayer);
+  if (
+    (currentPlayer === input - 1 && hitCounter >= input - 1) ||
+    standCounter === input
+  ) {
     while (dealerValue < dealerHit) {
-      for (let i = 0; i < input; i++) {
-        outputValue += `
-                    ${peoplePlaying[i].name}${peoplePlaying[i].value}`;
-      }
       dealerHand.push(deck.pop());
       dealerValueAdder();
+      aceChecker();
       let cardDisplayerDealer =
         "Dealer: " +
         dealerHand[0].suit +
@@ -446,9 +596,12 @@ function stand() {
         dealerHand[handLengthDealer].suit +
         dealerHand[handLengthDealer].name +
         " ";
+      cardCSS(
+        dealerHand[handLengthDealer].suit,
+        dealerHand[handLengthDealer].name,
+        21 + handLengthDealer
+      );
       handLengthDealer += 1;
-      outputValue += `
-                ${cardDisplayerDealer}${dealerValue}`;
     }
     if (dealerValue > maxScore) {
       outputValue += `
@@ -483,7 +636,6 @@ function stand() {
       }
     }
   }
-  nextPlayerChecker();
   roundOverChecker();
   outputValue += `
     It is ${players[currentPlayer].name} 's turn!
@@ -507,9 +659,15 @@ function restart() {
   hitCounter = 0;
   dealerHand = [];
   dealerValue = "";
+  standCounter = 0;
+  z = 0;
+  for (let i = 1; i < 25; i++) {
+    cardCSS("", "", i);
+  }
 
   roundCounter++;
 }
+
 function init() {
   const numOfPlayers = playersDOM.options[playersDOM.selectedIndex].value;
   input = Number(numOfPlayers);

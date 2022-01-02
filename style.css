@@ -1,14 +1,43 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  background-image: url("https://t3.ftcdn.net/jpg/03/25/38/64/360_F_325386410_7XLHgFBmPH10k0GCUXbikWCAeFFC8145.jpg");
-  background-size: cover;
+  background: rgba(12, 90, 43, 255);
   color: white;
 }
 h1 {
   font-size: 50px;
 }
-#submitBtn {
+.submitBtn {
   width: 50px;
-  height: 50px;
+  height: 30px;
+}
+
+.player {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
+
+.dealers {
+  margin-right: 19px;
+}
+
+.container-card {
+  display: flex;
+}
+
+.card {
+  width: 75px;
+  height: 100px;
+  background: white;
+  color: black;
+  border: black solid 2px;
+}
+
+.suit {
+  font-size: 30px;
+}
+
+.value {
+  font-size: 20px;
 }
